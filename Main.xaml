@@ -1,4 +1,4 @@
-<Activity mc:Ignorable="sap sap2010" x:Class="Main" VisualBasic.Settings="{x:Null}" sap:VirtualizedContainerService.HintSize="1240,2784" sap2010:WorkflowViewState.IdRef="ActivityBuilder_1" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:s="clr-namespace:System;assembly=System.Private.CoreLib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data.Common" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+<Activity mc:Ignorable="sap sap2010" x:Class="Main" VisualBasic.Settings="{x:Null}" sap:VirtualizedContainerService.HintSize="1240,2846" sap2010:WorkflowViewState.IdRef="ActivityBuilder_1" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:beh="clr-namespace:BalaReva.EasyExcel.HyperLinks;assembly=BalaReva.EasyExcel" xmlns:bem="clr-namespace:BalaReva.EasyExcel.Main;assembly=BalaReva.EasyExcel" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:s="clr-namespace:System;assembly=System.Private.CoreLib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data.Common" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <TextExpression.NamespacesForImplementation>
     <sco:Collection x:TypeArguments="x:String">
       <x:String>System.Activities</x:String>
@@ -38,6 +38,10 @@
       <x:String>System.Xml.Serialization</x:String>
       <x:String>UiPath.DataTableUtilities</x:String>
       <x:String>UiPath.UIAutomationCore.Contracts</x:String>
+      <x:String>BalaReva.EasyExcel.HyperLinks</x:String>
+      <x:String>BalaReva.EasyExcel.Base</x:String>
+      <x:String>BalaReva.EasyExcel.Main</x:String>
+      <x:String>BalaReva.EasyExcel.Utilities</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -97,9 +101,11 @@
       <AssemblyReference>UiPath.Excel</AssemblyReference>
       <AssemblyReference>System.Private.Xml</AssemblyReference>
       <AssemblyReference>System.Data.SqlClient</AssemblyReference>
+      <AssemblyReference>BalaReva.EasyExcel</AssemblyReference>
+      <AssemblyReference>BalaReva.EasyExcel.Utilities</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence DisplayName="Main Sequence" sap:VirtualizedContainerService.HintSize="634,2719" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence DisplayName="Main Sequence" sap:VirtualizedContainerService.HintSize="634,2781" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="x:String" Name="ConvertImaage" />
       <Variable x:TypeArguments="x:String" Name="ImagePath" />
@@ -108,24 +114,21 @@
       <Variable x:TypeArguments="s:Byte[]" Name="ByteString" />
       <Variable x:TypeArguments="x:String" Name="EmailGroup">
         <Variable.Default>
-          <Literal x:TypeArguments="x:String">sqgroup@sqgc.com</Literal>
+          <Literal x:TypeArguments="x:String">jahidur.rahman@sqgc.com</Literal>
         </Variable.Default>
       </Variable>
       <Variable x:TypeArguments="x:String" Default="\\10.12.0.7\Software Development\COE Communication Files\Excel\Links.xlsx" Name="InputPath" />
-      <Variable x:TypeArguments="x:String" Name="EmailGroupCC">
-        <Variable.Default>
-          <Literal x:TypeArguments="x:String">senthil.selvan@sqgc.com;sarath.padmasiri@sqgc.com;shihan.hassan@sqgc.com;indika.narasinha@sqgc.com;shane.baldsing@sqgc.com;warisul.abid@sqgc.com;nalin.wijedasa@sqgc.com;ahmed.shifayet@sqgc.com;aloke.bagchi@qcollection.com.sg;azwath.mohammad@sqgc.com;anwar.arefin@sqgc.com;jamir.ali@sqgc.com;tashmiah.lopa@sqgc.com;shaila.mazid@sqgc.com</Literal>
-        </Variable.Default>
-      </Variable>
+      <Variable x:TypeArguments="x:String" Name="EmailGroupCC" />
     </Sequence.Variables>
     <sap:WorkflowViewStateService.ViewState>
       <scg:Dictionary x:TypeArguments="x:String, x:Object">
         <x:Boolean x:Key="IsExpanded">True</x:Boolean>
       </scg:Dictionary>
     </sap:WorkflowViewStateService.ViewState>
-    <Sequence DisplayName="Sequence" sap:VirtualizedContainerService.HintSize="572,2608" sap2010:WorkflowViewState.IdRef="Sequence_2">
+    <Sequence DisplayName="Sequence" sap:VirtualizedContainerService.HintSize="572,2670" sap2010:WorkflowViewState.IdRef="Sequence_2">
       <Sequence.Variables>
         <Variable x:TypeArguments="sd:DataTable" Name="Dt_Links" />
+        <Variable x:TypeArguments="x:Int32" Name="idx" />
       </Sequence.Variables>
       <sap:WorkflowViewStateService.ViewState>
         <scg:Dictionary x:TypeArguments="x:String, x:Object">
@@ -199,17 +202,18 @@
           <InArgument x:TypeArguments="x:String">["&lt;p&gt;EmbadedImage&lt;/p&gt;&lt;p&gt;"]</InArgument>
         </Assign.Value>
       </Assign>
-      <ui:ForEachRow ColumnNames="{x:Null}" CurrentIndex="{x:Null}" DataTable="[Dt_Links]" DisplayName="For Each Row in Data Table" sap:VirtualizedContainerService.HintSize="510,722" sap2010:WorkflowViewState.IdRef="ForEachRow_1">
+      <ui:ForEachRow ColumnNames="{x:Null}" CurrentIndex="[idx]" DataTable="[Dt_Links]" DisplayName="For Each Row in Data Table" sap:VirtualizedContainerService.HintSize="510,784" sap2010:WorkflowViewState.IdRef="ForEachRow_1">
         <ui:ForEachRow.Body>
           <ActivityAction x:TypeArguments="sd:DataRow">
             <ActivityAction.Argument>
               <DelegateInArgument x:TypeArguments="sd:DataRow" Name="Row" />
             </ActivityAction.Argument>
-            <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="476,536" sap2010:WorkflowViewState.IdRef="Sequence_3">
+            <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="476,598" sap2010:WorkflowViewState.IdRef="Sequence_3">
               <Sequence.Variables>
                 <Variable x:TypeArguments="x:String" Name="LinkName" />
                 <Variable x:TypeArguments="x:String" Name="URL" />
                 <Variable x:TypeArguments="x:String" Name="Masking" />
+                <Variable x:TypeArguments="x:String" Name="Link_Address" />
               </Sequence.Variables>
               <sap:WorkflowViewStateService.ViewState>
                 <scg:Dictionary x:TypeArguments="x:String, x:Object">
@@ -224,14 +228,54 @@
                   <InArgument x:TypeArguments="x:String">[Row("Name").ToString]</InArgument>
                 </Assign.Value>
               </Assign>
-              <Assign sap:VirtualizedContainerService.HintSize="434,82" sap2010:WorkflowViewState.IdRef="Assign_9">
-                <Assign.To>
-                  <OutArgument x:TypeArguments="x:String">[URL]</OutArgument>
-                </Assign.To>
-                <Assign.Value>
-                  <InArgument x:TypeArguments="x:String">[Row("Links").ToString]</InArgument>
-                </Assign.Value>
-              </Assign>
+              <ui:CommentOut DisplayName="Comment Out" sap:VirtualizedContainerService.HintSize="434,52" sap2010:WorkflowViewState.IdRef="CommentOut_1">
+                <ui:CommentOut.Body>
+                  <Sequence DisplayName="Ignored Activities" sap:VirtualizedContainerService.HintSize="496,193" sap2010:WorkflowViewState.IdRef="Sequence_5">
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                      </scg:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                    <Assign sap:VirtualizedContainerService.HintSize="434,82" sap2010:WorkflowViewState.IdRef="Assign_9">
+                      <Assign.To>
+                        <OutArgument x:TypeArguments="x:String">[URL]</OutArgument>
+                      </Assign.To>
+                      <Assign.Value>
+                        <InArgument x:TypeArguments="x:String">[Row("Links").ToString]</InArgument>
+                      </Assign.Value>
+                    </Assign>
+                  </Sequence>
+                </ui:CommentOut.Body>
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+              </ui:CommentOut>
+              <bem:ExcelScope FilePassword="{x:Null}" ModifyPassword="{x:Null}" DisplayAlerts="False" DisplayName="Excel Scope" FilePath="[InputPath]" sap:VirtualizedContainerService.HintSize="434,52" sap2010:WorkflowViewState.IdRef="ExcelScope_1" MacroSettings="None" UpdateAutoLinks="Default" Visible="False">
+                <bem:ExcelScope.Body>
+                  <ActivityAction x:TypeArguments="bem:ExcelParam">
+                    <ActivityAction.Argument>
+                      <DelegateInArgument x:TypeArguments="bem:ExcelParam" Name="WorkBookObj" />
+                    </ActivityAction.Argument>
+                    <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="450,136" sap2010:WorkflowViewState.IdRef="Sequence_4">
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
+                      <beh:GetHyperlink ExecutionResult="{x:Null}" Address="[Link_Address]" Cell="[&quot;C&quot;+(idx+2).ToString]" ContinueOnError="False" Delay="3" DisplayName="Get Hyperlink" sap:VirtualizedContainerService.HintSize="388,25" sap2010:WorkflowViewState.IdRef="GetHyperlink_1" SheetName="Links" />
+                    </Sequence>
+                  </ActivityAction>
+                </bem:ExcelScope.Body>
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+              </bem:ExcelScope>
               <Assign sap:VirtualizedContainerService.HintSize="434,82" sap2010:WorkflowViewState.IdRef="Assign_12">
                 <Assign.To>
                   <OutArgument x:TypeArguments="x:String">[Masking]</OutArgument>
@@ -245,7 +289,7 @@
                   <OutArgument x:TypeArguments="x:String">[Mailbody]</OutArgument>
                 </Assign.To>
                 <Assign.Value>
-                  <InArgument x:TypeArguments="x:String">[Mailbody+LinkName+" : "+"&lt;a href='" + URL + "'&gt;" + Masking + "&lt;/a&gt;&lt;br&gt;"]</InArgument>
+                  <InArgument x:TypeArguments="x:String">[Mailbody+LinkName+" : "+"&lt;a href='" + Link_Address + "'&gt;" + Masking + "&lt;/a&gt;&lt;br&gt;"]</InArgument>
                 </Assign.Value>
               </Assign>
             </Sequence>
@@ -260,7 +304,7 @@
           <InArgument x:TypeArguments="x:String">[Mailbody.Replace("EmbadedImage",HTML_Tag)]</InArgument>
         </Assign.Value>
       </Assign>
-      <ui:SendOutlookMail ContinueOnError="{x:Null}" MailMessage="{x:Null}" ReplyTo="{x:Null}" TimeoutMS="{x:Null}" Account="coe.communications@sqgc.com" Bcc="jahidur.rahman@sqgc.com;anwar.arefin@sqgc.com" Body="[Mailbody]" Cc="[EmailGroupCC]" DisplayName="Send Outlook Mail Message" sap:VirtualizedContainerService.HintSize="510,152" sap2010:WorkflowViewState.IdRef="SendOutlookMail_1" Importance="Normal" IsBodyHtml="True" IsDraft="False" Sensitivity="Normal" Subject="Reminder: Utilize the modules from new AMS platform" To="[EmailGroup]">
+      <ui:SendOutlookMail Bcc="{x:Null}" ContinueOnError="{x:Null}" MailMessage="{x:Null}" ReplyTo="{x:Null}" TimeoutMS="{x:Null}" Account="coe.communications@sqgc.com" Body="[Mailbody]" Cc="[EmailGroupCC]" DisplayName="Send Outlook Mail Message" sap:VirtualizedContainerService.HintSize="510,152" sap2010:WorkflowViewState.IdRef="SendOutlookMail_1" Importance="Normal" IsBodyHtml="True" IsDraft="False" Sensitivity="Normal" Subject="Reminder: Utilize the modules from new AMS platform" To="[EmailGroup]">
         <ui:SendOutlookMail.Files>
           <scg:List x:TypeArguments="InArgument(x:String)" Capacity="0" />
         </ui:SendOutlookMail.Files>
